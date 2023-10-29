@@ -1,6 +1,7 @@
 /*
 This class is used to grow numbers. This class is called when there is enough water. 
 Meaning wasted water could be used to allow many trees to grow better
+Code example from tutorial 7
 */
 class Tree {
   // Position

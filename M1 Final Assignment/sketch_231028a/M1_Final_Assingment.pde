@@ -9,7 +9,8 @@ If you tighten the faucet before the water level reaches a certain level, the en
 import java.util.Arrays;
 import processing.sound.*;
 
-SoundFile SF;
+SoundFile waterSound;
+SoundFile treeSound;
 Background bg;
 Pool pool;
 Drippingwater[] drop = new Drippingwater[10];
@@ -18,17 +19,19 @@ boolean isEnd=false;
 boolean waterDropping = true;
 boolean isMove = true;
 float move=0;
+int treeSoundPlayTimes=0;
 
 void setup() {
   size(800, 800);
   bg = new Background();
   pool=new Pool();
-  SF= new SoundFile(this,"../Sound/dripping-water.mp3");
+  waterSound= new SoundFile(this,"../Sound/dripping-water.mp3");
+  treeSound = new SoundFile(this,"../Sound/tree-leaves.mp3");
   randomInit();
   for (int i = 0; i < drop.length; i++) {
-    drop[i] = new Drippingwater(new PVector(250,387));
+    drop[i] = new Drippingwater(new PVector(250,470));
   }
-  SF.play();
+  waterSound.play();
 }
 
 void draw() {
@@ -65,23 +68,27 @@ void draw() {
       }
       
       else if( pool.waterLevel<=630 && move>=height-100 ){
-         fill(#3495eb);
-         rect(0,0,width,50);
+        if(treeSoundPlayTimes==0){    //tree sound effect only play once
+          treeSound.play();
+          treeSoundPlayTimes+=1;
+        }
+        fill(#3495eb);
+        rect(0,0,width,50);
+        waterSound.stop();
         for (Tree t : trees) {
           t.display();
           t.tick();
         }
       }
-  }
-      
+  }     
 }
 void mousePressed() {
   float distance = dist(mouseX, mouseY, 405, 240);
   isEnd = false;
-  if (distance < 50) {
+  if (distance < 50 && move<=0 ) {
     waterDropping = false;
     isEnd = true;
-    SF.stop();
+    waterSound.stop();
   }
 }
 
@@ -90,7 +97,6 @@ void randomInit() {
     trees[i] = new Tree(random(width),random(200,height));
     trees[i].randomInit();
   }
-
   // Sort by y position, such that trees in front are drawn later
   Arrays.sort(trees, (t1,t2) -> Float.compare(t1.getPosY(),t2.getPosY()));
 }

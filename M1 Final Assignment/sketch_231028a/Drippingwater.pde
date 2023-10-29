@@ -17,7 +17,7 @@ class Drippingwater {
   // Display method to draw the water drop
   void display() {
     noStroke();  // No outline for the water drop
-    fill(0, 104, 139);  // Fill color for the water drop
+    fill(#3495eb);  // Fill color for the water drop
     circle(waterPosition.x, waterPosition.y, diameter);  // Draw the water drop as a circle
   }
 
